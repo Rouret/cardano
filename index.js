@@ -8,7 +8,9 @@ var http = require('http').createServer(app);
 var io = require('socket.io')(http);
 const PUBLIC_DIR = __dirname + "/public/"
 
-var db = new Database();
+const db = new Database();
+const game = new Game()
+
 
 app.use(express.static(config.public_folder))
 
@@ -17,13 +19,20 @@ app.get('/', (req, res) => {
 })
 
 io.on('connection', (socket) => {
-    // CLIENT MABAGEMENT
+    //**** CLIENT MABAGEMENT
     const id = socket.client.id;
     const player = new Player(id, "player1")
     const userAddress = socket.handshake.address;
 
+    //**** DB ADD
     db.addPlayer(player)
     Log.display(`➡️ with ${userAddress} [${id}] connected `);
+
+    //**** FIND A GAME
+
+
+
+    //**** CLIENT DISCONNECT
     socket.on('disconnect', () => {
         db.removePlayer(id)
         Log.display(`⬅️ with ${userAddress} [${id}] disconnected`);

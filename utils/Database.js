@@ -3,7 +3,6 @@ class DataBase {
     constructor() {
         this.data = {
             players: [],
-            game: [],
         }
     }
 
@@ -19,7 +18,6 @@ class DataBase {
     getPlayer(playerId) {
         return this.data.players.find(client => client.id === playerId)
     }
-
 }
 
 module.exports = DataBase
