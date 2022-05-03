@@ -10,8 +10,6 @@ const BASE = "anoCard"
 const port = 3000
 const PUBLIC_DIR = __dirname + "/public/"
 
-
-
 var db = new Database();
 
 app.use(express.static('public'))
@@ -36,8 +34,13 @@ io.on('connection', (socket) => {
 
     console.log(db.getClients("lobby"))
 
+    socket.on("sendMessage", message => {
+        message = (new Message(message,null,db.getClient("lobby",socket.client.id)))
+        io.to("lobby").emit(BASE + '.message',message)
+    })
+    
+
     socket.on('disconnect', () => {
-		//Remove from client from db
 		db.removeClient("lobby",socket.client.id)
         console.log(db.getClients("lobby"))
     });

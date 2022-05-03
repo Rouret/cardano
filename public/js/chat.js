@@ -1,6 +1,3 @@
-const socket = io();
-const BASE = "anoCard"
-
 $(function() {
     var INDEX = 0; 
     $("#chat-submit").click(function(e) {
@@ -32,6 +29,29 @@ $(function() {
       $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);    
     }  
     
+    function generate_button_message(msg, buttons){    
+
+      INDEX++;
+      var btn_obj = buttons.map(function(button) {
+         return  "              <li class=\"button\"><a href=\"javascript:;\" class=\"btn btn-primary chat-btn\" chat-value=\""+button.value+"\">"+button.name+"<\/a><\/li>";
+      }).join('');
+      var str="";
+      str += "<div id='cm-msg-"+INDEX+"' class=\"chat-msg user\">";
+      str += "          <div class=\"cm-msg-text\">";
+      str += msg;
+      str += "          <\/div>";
+      str += "          <div class=\"cm-msg-button\">";
+      str += "            <ul>";   
+      str += btn_obj;
+      str += "            <\/ul>";
+      str += "          <\/div>";
+      str += "        <\/div>";
+      $(".chat-logs").append(str);
+      $("#cm-msg-"+INDEX).hide().fadeIn(300);   
+      $(".chat-logs").stop().animate({ scrollTop: $(".chat-logs")[0].scrollHeight}, 1000);
+      $("#chat-input").attr("disabled", true);
+    }
+    
     $(document).delegate(".chat-btn", "click", function() {
       var value = $(this).attr("chat-value");
       var name = $(this).html();
@@ -50,18 +70,3 @@ $(function() {
     })
     
   })
-
-socket.on(`${BASE}.full`, function(msg) {
-   alert("The room is full")
-});
-
-socket.on(`${BASE}.connected`, function(msg) {
-    console.log(msg)
- });
-
-
- socket.on(`${BASE}.message`, function(msg) {
-    console.log(msg)
-    generate_message(msg.message,"user")
-    
- });

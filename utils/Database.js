@@ -27,7 +27,7 @@ class DataBase{
 	}
 
 	getClient(room,id){
-		return this.clients[room].players(client => client.id === id)
+		return this.clients[room].players.find(client => client.id === id)
 	}
 
 	getClients(room){
