@@ -2,7 +2,7 @@ const express = require('express');
 const Database = require('./utils/Database')
 const Player = require('./utils/Player')
 const Message = require('./utils/Message');
-const removeItems = require('remove-array-items');
+const CARDS = require('./data/cards.json');
 const app = express()
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
@@ -17,7 +17,6 @@ app.use(express.static('public'))
 app.get('/', (req, res) => {
   return res.sendFile(PUBLIC_DIR + 'index.html')
 })
-
 
 io.on('connection', (socket) => {
     //Room full

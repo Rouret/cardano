@@ -1,8 +1,9 @@
 const Game = require('../Game')
 const Player = require('../Player')
+const CARDS = require('../../data/cards.json')
 
-player1 = new Player("1","player1")
-player2 = new Player("2","player2")
+player1 = new Player("1","player1",CARDS)
+player2 = new Player("2","player2",CARDS)
 
 game = new Game([player1,player2])
 

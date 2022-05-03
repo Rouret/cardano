@@ -2,6 +2,7 @@ class Game{
     constructor(players){
         this.players = players;
         this.currentPlayer = 0;
+        
     }
 
     nextRound(){
