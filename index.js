@@ -1,46 +1,35 @@
 const express = require('express');
 const Database = require('./utils/Database')
 const Player = require('./utils/Player')
-const Message = require('./utils/Message');
-const CARDS = require('./data/cards.json');
+const Log = require('./utils/Log')
 const app = express()
+const config = require('./config.json');
 var http = require('http').createServer(app);
 var io = require('socket.io')(http);
-const BASE = "anoCard"
-const port = 3000
 const PUBLIC_DIR = __dirname + "/public/"
 
 var db = new Database();
 
-app.use(express.static('public'))
+app.use(express.static(config.public_folder))
 
 app.get('/', (req, res) => {
-  return res.sendFile(PUBLIC_DIR + 'index.html')
+    return res.sendFile(PUBLIC_DIR + 'index.html')
 })
 
 io.on('connection', (socket) => {
-    //Room full
-    if(db.getClients(db.defaultRoom).length === 2){
-        socket.emit(BASE + '.full',{message : "The room is full"})
-        return
-    }
+    // CLIENT MABAGEMENT
+    const id = socket.client.id;
+    const player = new Player(id, "player1")
+    const userAddress = socket.handshake.address;
 
-    //join game
-    newPlayer = new Player(socket.client.id,"name")
-    io.to("loby").emit(BASE + '.connected',new Message("A user has connected",newPlayer))
-    socket.join("lobby")
-    db.addClient("lobby",newPlayer)
-
-    if(db.getClients(db.defaultRoom).length === 2){
-        //Start a game
-    }
-
+    db.addPlayer(player)
+    Log.display(`➡️ with ${userAddress} [${id}] connected `);
     socket.on('disconnect', () => {
-		db.removeClient("lobby",socket.client.id)
-        console.log(db.getClients("lobby"))
+        db.removePlayer(id)
+        Log.display(`⬅️ with ${userAddress} [${id}] disconnected`);
     });
 });
 
-http.listen(port, () => {
-    console.log("oé oé")
+http.listen(config.port, () => {
+    Log.display(`🔥 ${config.name} is listening (${config.port}) 🔥`)
 });

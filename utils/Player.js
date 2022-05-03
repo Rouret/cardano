@@ -1,9 +1,7 @@
-class Player{
-    constructor(id,name,cards){
+class Player {
+    constructor(id, name) {
         this.name = name
         this.id = id
-        this.deck = cards.cards.slice(0,this.deckLength)
-        this.deckLength = 2
     }
 }
 module.exports = Player

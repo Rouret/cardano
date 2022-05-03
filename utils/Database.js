@@ -1,38 +1,25 @@
 const removeItems = require('remove-array-items')
-class DataBase{
-	constructor(){
-		this.clients = {
-            "lobby": {
-                players : []
-            }
+class DataBase {
+    constructor() {
+        this.data = {
+            players: [],
+            game: [],
         }
-        this.defaultRoom = "lobby"
-	}
+    }
 
-	addClient(room,client){
-        this.clients[room].players.push(client)
-	}
+    addPlayer(player) {
+        this.data.players.push(player)
+    }
 
-	removeClient(room,id){
-        
-		let clientIndex = this.clients[room].players.findIndex(client => client.id === id)
-		removeItems(this.clients[room].players, clientIndex, 1)
-	}
+    removePlayer(playerId) {
+        let clientIndex = this.data.players.findIndex(client => client.id === playerId)
+        removeItems(this.data.players, clientIndex, 1)
+    }
 
-	updateClient(room,clientUpdated){
-		let clientIndex = this.clients[room].players.findIndex(client => client.id === clientUpdated.id)
-		if(clientIndex !== -1){
-			this.clients[lobby].players[clientIndex] = clientUpdated
-		}
-	}
+    getPlayer(playerId) {
+        return this.data.players.find(client => client.id === playerId)
+    }
 
-	getClient(room,id){
-		return this.clients[room].players.find(client => client.id === id)
-	}
-
-	getClients(room){
-		return this.clients[room].players
-	}
 }
 
 module.exports = DataBase
