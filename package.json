@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "test" : "jest"
   },
   "author": "",
   "license": "ISC",
@@ -12,5 +13,8 @@
     "express": "^4.15.2",
     "remove-array-items": "^2.0.1",
     "socket.io": "^3.0.2"
+  },
+  "devDependencies": {
+    "jest": "^28.0.3"
   }
 }

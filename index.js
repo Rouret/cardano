@@ -32,13 +32,9 @@ io.on('connection', (socket) => {
     socket.join("lobby")
     db.addClient("lobby",newPlayer)
 
-    console.log(db.getClients("lobby"))
-
-    socket.on("sendMessage", message => {
-        message = (new Message(message,null,db.getClient("lobby",socket.client.id)))
-        io.to("lobby").emit(BASE + '.message',message)
-    })
-    
+    if(db.getClients(db.defaultRoom).length === 2){
+        //Start a game
+    }
 
     socket.on('disconnect', () => {
 		db.removeClient("lobby",socket.client.id)
