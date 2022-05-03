@@ -1,11 +1,21 @@
 const socket = io();
-const BASE = "anoCard"
+const config = {
+    link: {
+        gameFull: "CardAno.game.full",
+        gameLog: "CardAno.game.log",
+        game: "CardAno.game",
+    }
+}
 
-socket.on(`${BASE}.full`, function(msg) {
-   alert("The room is full")
+
+socket.on(config.link.gameFull, function(msg) {
+    $("body").html("Game is full sorry mon reuf")
 });
 
-socket.on(`${BASE}.connected`, function(msg) {
+socket.on(config.link.gameLog, function(msg) {
     console.log(msg)
- });
+});
 
+socket.on(config.link.game, function(msg) {
+    console.log(msg)
+});

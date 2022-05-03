@@ -6,7 +6,6 @@ const db = new DB()
 test("addPlayer", () => {
     const idPlayer = "123"
     db.addPlayer(new Player(idPlayer, "player1"))
-    console.log(db.data.players)
     expect(db.data.players.length).toBe(1)
     expect(db.data.players[0].id).toEqual(idPlayer)
 })
