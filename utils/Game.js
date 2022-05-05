@@ -1,8 +1,10 @@
 const removeItems = require('remove-array-items')
+const Action = require('./Action')
+
 class Game {
     constructor() {
         this.players = [];
-        this.currentPlayer = 0;
+        this.currentPlayerIndex = 0;
         this.roomName = "game"
         this.statusList = {
             waiting: 0,
@@ -15,7 +17,7 @@ class Game {
         return {
             status: this.status,
             players: this.players,
-            currentPlayer: this.players[this.currentPlayer]
+            currentPlayer: this.getCurrentPlayer()
         };
     }
 
@@ -47,11 +49,22 @@ class Game {
     }
 
     getCurrentPlayer() {
-        return this.players[this.currentPlayer];
+        return this.players[this.currentPlayerIndex];
     }
 
     nextPlayer() {
-        this.currentPlayer = (this.currentPlayer + 1) % this.players.length;
+        this.currentPlayerIndex = (this.currentPlayerIndex + 1) % this.players.length;
+    }
+
+    action(action) {
+        if (this.status !== this.statusList.playing) return
+        switch (action.type) {
+            case Action.actionList.nextRound:
+                this.nextPlayer();
+                break;
+            default:
+                break;
+        }
     }
 }
 

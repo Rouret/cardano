@@ -3,6 +3,7 @@ const Database = require('./utils/Database')
 const Player = require('./utils/Player')
 const Game = require('./utils/Game')
 const Log = require('./utils/Log')
+const Action = require('./utils/Action')
 const app = express()
 const config = require('./config.json');
 const Message = require('./utils/Message');
@@ -36,6 +37,11 @@ io.on('connection', (socket) => {
 
     //**** FIND A GAME
     const result = game.addPlayer(player);
+
+    //**** EMIT USER INFO
+    socket.emit(baseNameEmit("user"), player)
+
+    //**** ROOM CHECK
     if (!result) {
         socket.emit(baseNameEmit("game.full"))
     } else {
@@ -45,6 +51,21 @@ io.on('connection', (socket) => {
             io.to(game.roomName).emit(baseNameEmit("game"), game.getGameStatus())
         }
     }
+
+    //**** GAME
+
+    socket.on(baseNameEmit("game"), (msg) => {
+        action = new Action(msg.type, player, msg.obj)
+
+        if (game.getCurrentPlayer().id !== player.id) return
+        if (game.status !== game.statusList.playing) return
+
+        game.action(action)
+
+        io.to(game.roomName).emit(baseNameEmit("game"), game.getGameStatus())
+
+    })
+
 
     //**** CLIENT DISCONNECT
     socket.on('disconnect', () => {
